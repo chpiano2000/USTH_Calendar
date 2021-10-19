@@ -1,5 +1,6 @@
 import requests
 from bs4 import  BeautifulSoup
+from datetime import datetime
 import argparse
 parser = argparse.ArgumentParser()
 parser.add_argument("--major", type=str, required=True, help='choose from: WEO, BIO, NANO, ICT, SA, ENERGY, MST_BME, MST_BMS, FST, AE, CHEM, CS, EPE')
@@ -63,6 +64,7 @@ class USTHCalendar:
             }
 
             classes.append(lesson)
+        return classes
 
     def getResults(self, major, minDate, maxDate):
         timeMin = f"{minDate}T00%3A00%3A00%2B07%3A00"
@@ -71,10 +73,10 @@ class USTHCalendar:
         url = self.subject(major, timeMin, timeMax)
         data = requests.get(url)
         
-        result = self.parseData(data)
+        result = self.parseData(data.json())
         
         return result
 
 usthCalendar = USTHCalendar()
 data = usthCalendar.getResults(args.major, args.minDate, args.maxDate)
-print(data)
+print(args.minDate)
